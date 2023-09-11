@@ -1,6 +1,6 @@
-﻿using JwtStore.Core.SharedContext.Entities;
+﻿using JwtStore.Core.Contexts.SharedContext.Entities;
 
-namespace JwtStore.Core.AccountContext.ValueObjects;
+namespace JwtStore.Core.Contexts.AccountContext.ValueObjects;
 
 public class Verification : Entity
 {

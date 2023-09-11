@@ -1,18 +1,28 @@
 ﻿using System.Security.Cryptography;
 
-namespace JwtStore.Core.AccountContext.ValueObjects;
+namespace JwtStore.Core.Contexts.AccountContext.ValueObjects;
 
 public class Password
 {
     private const string Valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private const string Special = "!@#$%^&*()[]{};:?/\\<>.,";
 
+    protected Password() { }
+
+    public Password(string? password = null)
+    {
+        if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
+            password = Generate();
+
+        Hash = Hashing(password);
+    }
+
     public string Hash { get; } = string.Empty;
     public string ResetCode { get; } = Guid.NewGuid().ToString("N")[..8].ToUpper();
 
     public static string Generate(short length = 16, bool includeSpecialChars = true, bool UpperCase = false)
     {
-        var chars = includeSpecialChars ? (Valid + Special) : (Valid);
+        var chars = includeSpecialChars ? Valid + Special : Valid;
         var startRandom = UpperCase ? 26 : 0;
         var index = 0;
         var random = new Random();
