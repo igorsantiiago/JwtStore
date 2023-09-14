@@ -13,7 +13,7 @@ public class Repository : IRepository
         _context = context;
     }
     public async Task<bool> AnyAsync(string email, CancellationToken cancellationToken)
-        => await _context.Users.AsNoTracking().AnyAsync(user => user.Email == email);
+        => await _context.Users.AsNoTracking().AnyAsync(user => user.Email.Address == email);
 
     public async Task SaveAsync(User user, CancellationToken cancellationToken)
     {

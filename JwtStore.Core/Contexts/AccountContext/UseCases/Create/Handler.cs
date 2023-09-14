@@ -1,10 +1,11 @@
 ﻿using JwtStore.Core.Contexts.AccountContext.Entities;
 using JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts;
 using JwtStore.Core.Contexts.AccountContext.ValueObjects;
+using MediatR;
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create;
 
-public class Handler
+public class Handler : IRequestHandler<Request, Response>
 {
     private readonly IRepository _repository;
     private readonly IService _service;
@@ -79,18 +80,18 @@ public class Handler
 
         #endregion
 
-        #region Send activation e-mail
+        //#region Send activation e-mail
 
-        try
-        {
-            await _service.SendVerificationEmailAsync(user, cancellationToken);
-        }
-        catch
-        {
-            // Already persisted data. Do nothing.
-        }
+        //try
+        //{
+        //    await _service.SendVerificationEmailAsync(user, cancellationToken);
+        //}
+        //catch
+        //{
+        //    // Already persisted data. Do nothing.
+        //}
 
-        #endregion
+        //#endregion
 
         return new Response("Account created successfully", new ResponseData(user.Id, user.Name, user.Email));
     }
