@@ -24,15 +24,15 @@ public partial class Email : ValueObject
             throw new Exception("Email inválido!");
     }
 
-    public string? Address { get; }
-    public string Hash => Address!.ToBase64();
+    public string Address { get; } = string.Empty;
+    public string Hash => Address.ToBase64();
     public Verification Verification { get; private set; } = new();
 
     public void ResendVerification() => Verification = new Verification();
 
     public static implicit operator string(Email email) => email.ToString();
     public static implicit operator Email(string address) => new Email(address);
-    public override string ToString() => Address!;
+    public override string ToString() => Address;
 
     [GeneratedRegex(Pattern)]
     private static partial Regex EmailRegex();

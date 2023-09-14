@@ -24,5 +24,8 @@ public class UserMap : IEntityTypeConfiguration<User>
         builder.OwnsOne(user => user.Password).Property(password => password.Hash).HasColumnName("PasswordHash").HasMaxLength(255).IsRequired(true);
         builder.OwnsOne(user => user.Password).Property(password => password.ResetCode).HasColumnName("PasswordResetCode").HasMaxLength(10).IsRequired(true);
 
+        builder.HasMany(user => user.Roles).WithMany(role => role.Users).UsingEntity<Dictionary<string, object>>("UserRole",
+            role => role.HasOne<Role>().WithMany().HasForeignKey("RoleId").OnDelete(DeleteBehavior.Cascade),
+            user => user.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade));
     }
 }

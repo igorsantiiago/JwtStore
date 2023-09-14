@@ -5,7 +5,7 @@ namespace JwtStore.Core.Contexts.AccountContext.ValueObjects;
 public class Password
 {
     private const string Valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private const string Special = "!@#$%^&*()[]{};:?/\\<>.,";
+    private const string Special = "!@#$%^&*()[]{};:?/\\<>.,-_";
 
     protected Password() { }
 
@@ -24,11 +24,11 @@ public class Password
 
     public static string Generate(short length = 16, bool includeSpecialChars = true, bool UpperCase = false)
     {
-        var chars = includeSpecialChars ? Valid + Special : Valid;
+        var chars = includeSpecialChars ? (Valid + Special) : Valid;
         var startRandom = UpperCase ? 26 : 0;
         var index = 0;
-        var random = new Random();
         var res = new char[length];
+        var random = new Random();
 
         while (index < length)
             res[index++] = chars[random.Next(startRandom, chars.Length)];
@@ -43,7 +43,7 @@ public class Password
 
         password += Configuration.Secrets.PasswordSaltKey;
 
-        using var algorithm = new Rfc2898DeriveBytes(password, saltSize, iterations, HashAlgorithmName.SHA512);
+        using var algorithm = new Rfc2898DeriveBytes(password, saltSize, iterations, HashAlgorithmName.SHA256);
 
         var key = Convert.ToBase64String(algorithm.GetBytes(keySize));
         var salt = Convert.ToBase64String(algorithm.Salt);
@@ -66,7 +66,7 @@ public class Password
         if (hashIterations != iterations)
             return false;
 
-        using var algorithm = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA512);
+        using var algorithm = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256);
         var keyToCheck = algorithm.GetBytes(keySize);
 
         return keyToCheck.SequenceEqual(key);

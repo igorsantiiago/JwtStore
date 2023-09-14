@@ -16,7 +16,7 @@ public class Verification : Entity
         if (IsActive)
             throw new Exception("Este item já foi ativado!");
 
-        if (ExpiresAt <= DateTime.UtcNow)
+        if (ExpiresAt < DateTime.UtcNow)
             throw new Exception("Este código esta expirado!");
 
         if (!string.Equals(code.Trim(), Code.Trim(), StringComparison.CurrentCultureIgnoreCase))

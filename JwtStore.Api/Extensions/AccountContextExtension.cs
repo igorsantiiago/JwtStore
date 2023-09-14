@@ -61,5 +61,10 @@ public static class AccountContextExtension
             return Results.Ok(result);
         });
         #endregion
+
+        app.MapPost("api/v1/test", (HttpContext context) =>
+        {
+            return "Hello";
+        }).RequireAuthorization("Admin");
     }
 }

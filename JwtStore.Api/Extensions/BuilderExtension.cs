@@ -44,7 +44,13 @@ public static class BuilderExtension
                 ValidateAudience = false
             };
         });
-        builder.Services.AddAuthorization();
+
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", p => p.RequireRole("Admin"));
+            options.AddPolicy("Premium", p => p.RequireRole("Premium"));
+            options.AddPolicy("Student", p => p.RequireRole("Student"));
+        });
     }
 
     public static void AddMediatr(this WebApplicationBuilder builder)
